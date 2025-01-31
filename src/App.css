@@ -1,0 +1,183 @@
+body {
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  font-family: Arial, sans-serif;
+}
+
+/* Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  height: 100vh;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Modal Container */
+.modal-container {
+  background: white;
+
+  width: 550px;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  animation: slideIn 0.3s ease-out;
+}
+
+/* Header */
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: pink;
+  padding: 15px;
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: white;
+  cursor: pointer;
+}
+
+/* Body */
+.modal-body {
+  padding: 20px;
+
+  overflow: auto;
+}
+
+.modal-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.label {
+  font-weight: bold;
+  color: #333;
+}
+
+.value {
+  display: flex;
+  align-items: center;
+}
+
+.value img {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+/* Footer */
+.modal-footer {
+  display: flex;
+  justify-content: space-evenly;
+  padding: 15px;
+  background: #f9f9f9;
+}
+
+.accept-btn {
+  padding: 10px 20px;
+  background: green;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.decline-btn {
+  padding: 10px 20px;
+  background: red;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Animations */
+@keyframes slideIn {
+  from {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Autocomplete Container */
+.autocomplete-container {
+  position: relative;
+  width: 100%;
+  /* max-width: 400px;  */
+  margin: 0 auto;
+  font-family: "Arial", sans-serif;
+}
+
+/* Input Field */
+.autocomplete-input {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.autocomplete-input:focus {
+  border-color: #007bff;
+}
+
+/* Suggestions List */
+.autocomplete-suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  max-height: 300px;
+  overflow-y: auto;
+  margin: 0;
+  padding: 0;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 9999999 !important;
+}
+
+/* Each suggestion item */
+.autocomplete-suggestion {
+  padding: 10px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.autocomplete-suggestion:hover {
+  background-color: #f1f1f1;
+}
+
+.autocomplete-suggestion:active {
+  background-color: #e1e1e1;
+}
