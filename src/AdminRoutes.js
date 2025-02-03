@@ -5,11 +5,11 @@ import Layout from "./Components/Layout/Layout";
 import UsersList from "./Pages/Users/UsersList";
 import RestaurantsLists from "./Pages/Restaurants/RestaurantsLists/RestaurantsLists";
 import ButterBestLists from "./Pages/Restaurants/ButterBest/ButterBestLists";
-import AddRestaurant from "./Components/Restaurants/AddRestaurant/AddRestaurant";
 import PrivacyPolicy from "./Pages/Privacy&Policy/Privacy&Policy";
 import TermsConditionsPage from "./Pages/Terms&Condition/TermsCondition";
 import EmailSetting from "./Pages/EmailSetting/EmailSetting";
 import ReportedPost from "./Pages/Posts/ReportedPost";
+import AddRestaurant from "./Pages/Restaurants/AddRestaurant/AddRestaurant";
 
 function AdminRoutes() {
   return (

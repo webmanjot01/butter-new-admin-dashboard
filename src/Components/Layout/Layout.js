@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import "./layout.css";
 import { FaBarsStaggered } from "react-icons/fa6";
 import SideBarItems from "./SideBarItems";
-import { RiFullscreenExitFill } from "react-icons/ri";
-import { RiFullscreenFill } from "react-icons/ri";
+import { useNavigate } from "react-router-dom";
+
 function Layout({ children }) {
   const [isLarge, setIslarge] = useState(true);
-
+  const nagigate = useNavigate();
   return (
     <>
       <div className="main-layout">
@@ -27,7 +27,14 @@ function Layout({ children }) {
               />
             </div>
             <div className="right-items">
-              <div role="button" className="cursor-pointer">
+              <div
+                role="button"
+                onClick={() => {
+                  localStorage.clear();
+                  nagigate("/login");
+                }}
+                className="cursor-pointer"
+              >
                 Logout
               </div>
             </div>

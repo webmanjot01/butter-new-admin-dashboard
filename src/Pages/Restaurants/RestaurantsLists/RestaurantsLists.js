@@ -10,7 +10,7 @@ import ScrapRestaurantModal from "../../../Components/Restaurants/ScrapRestauran
 import RestaurantViewModal from "../../../Components/Restaurants/ViewModal/RestaurantViewModal";
 import { toast } from "react-toastify";
 import { Link, Navigate, useNavigate } from "react-router-dom";
-
+import { FcSynchronize } from "react-icons/fc";
 const RestaurantsLists = () => {
   const [isTableLoading, setIsTableLoading] = useState(false);
   const [isScraperLoading, setIsScraperLoading] = useState(false);
@@ -74,6 +74,50 @@ const RestaurantsLists = () => {
         console.error("Error deleting restaurant:", error);
       });
   };
+
+  const addToButterBest = (id) => {
+    let uri = serverAddress + "/admin/add-butterbest-restaurant/" + id;
+
+    axios
+      .post(uri)
+      .then((response) => {
+        toast.success("Restaurant Added to #ButterBest");
+        fetchRestaurants();
+      })
+      .catch((error) => {
+        // Handle error
+        console.error("Error:", error);
+      });
+  };
+  const removeFromButterBest = (id) => {
+    let uri = serverAddress + "/admin/remove-butterbest-restaurant/" + id;
+
+    axios
+      .post(uri)
+      .then((response) => {
+        toast.success("Restaurant removed from #ButterBest");
+        fetchRestaurants();
+      })
+      .catch((error) => {
+        // Handle error
+        console.error("Error:", error);
+      });
+  };
+
+  const handleVerifyRestaurant = (id) => {
+    let uri = serverAddress + "/admin/verify-restaurant/" + id;
+    axios
+      .post(uri)
+      .then((response) => {
+        toast.success("Restaurant verified");
+        fetchRestaurants();
+      })
+      .catch((error) => {
+        // Handle error
+        console.error("Error:", error);
+      });
+  };
+
   return (
     <>
       {isScraperLoading && <CustomLoader />}
@@ -135,12 +179,21 @@ const RestaurantsLists = () => {
           {!isTableLoading && (
             <tbody>
               {restaurants.map((item) => (
-                <tr key={item.id}>
+                <tr key={item._id}>
                   <td>{item.business_name}</td>
                   <td>{item.email}</td>
                   <td>{item.phone}</td>
                   <td>{item.address}</td>
-                  <td>{item.restaurant_status}</td>
+                  <td>
+                    {item.restaurant_status}{" "}
+                    {item.restaurant_status === "pending" && (
+                      <FcSynchronize
+                        onClick={() => handleVerifyRestaurant(item._id)}
+                        className="cursor"
+                        size={25}
+                      />
+                    )}
+                  </td>
                   <td>
                     <FaPen
                       onClick={() => {
@@ -149,13 +202,19 @@ const RestaurantsLists = () => {
                       }}
                       className="mx-2 cursor"
                       color="#34ebb1"
-                    />{" "}
+                    />
                     <MdDelete
                       onClick={() => handleDelete(item._id)}
                       className="mx-3 cursor"
                       color="#f2645a"
                     />
-                    <RiHeartAdd2Fill className="mx-2 cursor" color="#db34eb" />
+                    {!item.titleTag && (
+                      <RiHeartAdd2Fill
+                        onClick={() => addToButterBest(item._id)}
+                        className="mx-2 cursor"
+                        color="#db34eb"
+                      />
+                    )}
                   </td>
                 </tr>
               ))}

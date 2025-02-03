@@ -5,7 +5,7 @@ const apiKey = "AIzaSyCMh77P3xQzQwC9VmOffzFmmvJ6IVFuwKI";
 const Autocomplete = ({ setLocation }) => {
   const [address, setAddress] = useState("");
   const [predictions, setPredictions] = useState([]);
-  const [locationDetails, setLocationDetails] = useState(null); // For storing the city, state, and country
+  const [locationDetails, setLocationDetails] = useState(null);
   const inputRef = useRef(null);
 
   useEffect(() => {
@@ -15,7 +15,7 @@ const Autocomplete = ({ setLocation }) => {
           new window.google.maps.places.AutocompleteService();
         const placesService = new window.google.maps.places.PlacesService(
           document.createElement("div")
-        ); // Create a hidden div to use the Places Service
+        );
 
         const fetchPredictions = (query) => {
           if (query.length < 3) {
@@ -69,7 +69,6 @@ const Autocomplete = ({ setLocation }) => {
     };
   }, []);
 
-  // Get place details (city, state, country) when a prediction is selected
   const fetchPlaceDetails = (placeId) => {
     const placesService = new window.google.maps.places.PlacesService(
       document.createElement("div")
@@ -88,14 +87,32 @@ const Autocomplete = ({ setLocation }) => {
         const country = place.address_components.find((component) =>
           component.types.includes("country")
         )?.long_name;
-
-        setLocationDetails({ city, state, country });
-        setLocation({ city, state, country });
+        const latitude = place.geometry?.location?.lat();
+        const longitude = place.geometry?.location?.lng();
+        const postalCode = place.address_components.find((component) =>
+          component.types.includes("postal_code")
+        )?.long_name;
+        console.log("place", place.address_components);
+        setLocationDetails({
+          city,
+          state,
+          country,
+          latitude,
+          longitude,
+          postal_code: postalCode,
+        });
+        setLocation({
+          city,
+          state,
+          country,
+          latitude,
+          longitude,
+          postal_code: postalCode,
+        });
       }
     });
   };
 
-  // Select a prediction and fetch its details
   const handleSelect = (prediction) => {
     setAddress(prediction.description);
     setPredictions([]);
@@ -110,9 +127,8 @@ const Autocomplete = ({ setLocation }) => {
           ref={inputRef}
           value={address}
           className="form-control"
-          onChange={(e) => setAddress(e.target.value)} // Update state on input change
+          onChange={(e) => setAddress(e.target.value)}
           placeholder="Search for a place"
-          // className="autocomplete-input"
         />
         {predictions.length > 0 && (
           <ul className="autocomplete-suggestions">
@@ -128,7 +144,7 @@ const Autocomplete = ({ setLocation }) => {
           </ul>
         )}
       </div>
-      {locationDetails && (
+      {/* {locationDetails && (
         <div className="location-details mt-3">
           <p>
             <strong>City:</strong> {locationDetails.city}
@@ -139,8 +155,14 @@ const Autocomplete = ({ setLocation }) => {
           <p>
             <strong>Country:</strong> {locationDetails.country}
           </p>
+          <p>
+            <strong>Latitude:</strong> {locationDetails.latitude}
+          </p>
+          <p>
+            <strong>Longitude:</strong> {locationDetails.longitude}
+          </p>
         </div>
-      )}
+      )} */}
     </div>
   );
 };

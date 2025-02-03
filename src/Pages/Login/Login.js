@@ -4,31 +4,37 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { serverAddress } from "../../envdata";
 function Login({ setIsLogin }) {
-  const [email,setemail] =useState('')
-  const [password,setPassword] = useState('')
-  const navigate = useNavigate()
-  const NavigateFun = (e) => {
-    e.preventDefault()
-    axios.post(serverAddress+'/api/v1/user/login',{email,password})
-    .then((response) => {
-      console.log(response.data.login);
-      if (response.data.login) {
-        navigate('/admin')
-        localStorage.setItem('UserData', JSON.stringify(response.data.user))
-      }
-    })
-    .catch((error) => {
-      console.error(error);
-    });
-   
+  const [email, setemail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
+  const NavigateFun = (e) => {
+    e.preventDefault();
+    axios
+      .post(serverAddress + "/admin/login", { email, password })
+      .then((response) => {
+        if (response.data.status === true) {
+          navigate("/admin");
+          localStorage.setItem(
+            "adminToken",
+            "dgwedfefgpeusifh;ewfuwerhfopuisdgjdrbfghgpisd"
+          );
+          localStorage.setItem(
+            "adminData",
+            JSON.stringify(response.data.userdata)
+          );
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   return (
     <>
       <div className="login-main">
         <form onSubmit={NavigateFun} className="form_main">
-          <p className="heading">Login</p>
+          <p className="heading">Butter Login</p>
           <div className="inputContainer">
             <svg
               className="inputIcon"
@@ -44,7 +50,7 @@ function Login({ setIsLogin }) {
               type="text"
               className="inputField"
               id="username"
-              onChange={(e)=>setemail(e.target.value)}
+              onChange={(e) => setemail(e.target.value)}
               placeholder="Username"
             />
           </div>
@@ -63,14 +69,11 @@ function Login({ setIsLogin }) {
               type="password"
               className="inputField"
               id="password"
-              onChange={(e)=>setPassword(e.target.value)}
+              onChange={(e) => setPassword(e.target.value)}
               placeholder="Password"
             />
           </div>
           <button id="button">Submit</button>
-          <Link to={'/register'} className="forgotLink" href="#">
-           Register Now
-          </Link>
         </form>
       </div>
     </>

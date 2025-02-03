@@ -12,6 +12,7 @@ const TagInput = ({ value, setEditedRestaurant }) => {
   // Handle adding tags
   const handleKeyDown = (event) => {
     if (event.key === "Enter" && input.trim() !== "") {
+      event.preventDefault();
       setTags((prevTags) => [...prevTags, input.trim()]);
       setEditedRestaurant((prev) => ({
         ...prev,
@@ -48,6 +49,7 @@ const TagInput = ({ value, setEditedRestaurant }) => {
           placeholder="Press Enter to add a tag"
         />
       </div>
+
       <div style={{ marginTop: "10px" }}>
         {tags.map((tag, index) => (
           <span
@@ -63,6 +65,7 @@ const TagInput = ({ value, setEditedRestaurant }) => {
             {tag}
             <button
               onClick={() => handleTagRemove(index)}
+              role="button"
               style={{
                 marginLeft: "10px",
                 border: "none",

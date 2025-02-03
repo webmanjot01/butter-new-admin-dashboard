@@ -9,20 +9,20 @@ function App() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  useEffect(() => {  
-    // const myData = JSON.parse(localStorage.getItem("UserData"));
-    // if (!myData) {
-    //   navigate("/login");
-    // }
+  useEffect(() => {
+    const myData = localStorage.getItem("adminToken");
+    if (!myData) {
+      navigate("/login");
+    }
     if (location.pathname === "/") {
       navigate("/admin");
     }
-  }, [location.pathname]); 
+  }, [location.pathname]);
 
   return (
     <>
       {/* */}
-      
+
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />

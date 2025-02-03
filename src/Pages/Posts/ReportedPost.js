@@ -1,5 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Table } from "react-bootstrap";
+import { serverAddress } from "../../envdata";
+import axios from "axios";
+import { FaEye, FaPen } from "react-icons/fa";
+import ViewModal from "../../Components/Posts/ReportedPost/ViewModal";
 
 function ReportedPost() {
   const [isTableLoading, setIsTableLoading] = useState(false);
@@ -11,6 +15,32 @@ function ReportedPost() {
   const [restaurants, setRestaurants] = useState([]); // List of restaurants
   const [search, setSearch] = useState("");
   const [isActive, setIsActive] = useState("all");
+
+  function fetchRestaurants() {
+    try {
+      const url = serverAddress + `/getallReportpost`;
+      setIsTableLoading(true);
+      axios
+        .get(url)
+        .then((response) => {
+          setRestaurants(response.data.data);
+          // setTotalItems(response.data.total_items);
+          // setTotalPages(response.data.total_pages);
+          setIsTableLoading(false);
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          setIsTableLoading(false);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  const [singleData, setSelectedData] = useState({});
+  const [isView, setIsView] = useState(false);
+  useEffect(() => {
+    fetchRestaurants();
+  }, [page, search, isActive]); // Refetch when the page changes
   return (
     <div>
       <div className="m-4 d-flex justify-content-between bg-light p-3 rounded-2">
@@ -28,17 +58,16 @@ function ReportedPost() {
               <th>Actions</th>
             </tr>
           </thead>
-          {/* {!isTableLoading && (
+          {!isTableLoading && (
             <tbody>
-              {restaurants.map((item) => (
-                <tr key={item.id}>
-                  <td>{item.business_name}</td>
-                  <td>{item.email}</td>
-                  <td>{item.phone}</td>
-                  <td>{item.address}</td>
-                  <td>{item.restaurant_status}</td>
+              {restaurants.map((item, ind) => (
+                <tr key={ind}>
+                  <td>{ind + 1}</td>
+                  <td>{item?.reported_by?.username}</td>
+                  <td>{item?.reported_post?._id}</td>
+                  <td>{item?.reported_user?.username}</td>
                   <td>
-                    <FaPen
+                    <FaEye
                       onClick={() => {
                         setIsView(true);
                         setSelectedData(item);
@@ -46,17 +75,11 @@ function ReportedPost() {
                       className="mx-2 cursor"
                       color="#34ebb1"
                     />{" "}
-                    <MdDelete
-                      onClick={() => handleDelete(item._id)}
-                      className="mx-3 cursor"
-                      color="#f2645a"
-                    />
-                    <RiHeartAdd2Fill className="mx-2 cursor" color="#db34eb" />
                   </td>
                 </tr>
               ))}
             </tbody>
-          )} */}
+          )}
         </Table>
 
         {isTableLoading ? (
@@ -105,6 +128,12 @@ function ReportedPost() {
           </Button>
         </div>
       </div>
+      <ViewModal
+        isOpen={isView}
+        setIsOpen={setIsView}
+        clearData={setSelectedData}
+        data={singleData}
+      />
     </div>
   );
 }
