@@ -11,6 +11,7 @@ import RestaurantViewModal from "../../../Components/Restaurants/ViewModal/Resta
 import { toast } from "react-toastify";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { FcSynchronize } from "react-icons/fc";
+import CsvExport from "../../../Components/CSVExport/CSVExport";
 const RestaurantsLists = () => {
   const [isTableLoading, setIsTableLoading] = useState(false);
   const [isScraperLoading, setIsScraperLoading] = useState(false);
@@ -62,17 +63,21 @@ const RestaurantsLists = () => {
     setSelectedData({});
   };
 
-  const handleDelete = (restaurantId) => {
-    axios
-      .delete(`${serverAddress}/remove/restaurant/${restaurantId}`)
-      .then((response) => {
-        toast.success("Restaurant deleted Successfully");
-        fetchRestaurants();
-      })
-      .catch((error) => {
-        // Handle error
-        console.error("Error deleting restaurant:", error);
-      });
+  const handleDelete = async (restaurantId) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete the restaurant?"
+    );
+
+    if (!confirmDelete) return; // Exit if the user cancels
+
+    try {
+      await axios.delete(`${serverAddress}/remove/restaurant/${restaurantId}`);
+      toast.success("Restaurant deleted successfully");
+      fetchRestaurants(); // Refresh restaurant list
+    } catch (error) {
+      console.error("Error deleting restaurant:", error);
+      toast.error("Failed to delete restaurant. Please try again.");
+    }
   };
 
   const addToButterBest = (id) => {
@@ -121,20 +126,21 @@ const RestaurantsLists = () => {
   return (
     <>
       {isScraperLoading && <CustomLoader />}
-      <div className="m-4 d-flex justify-content-between bg-light p-3 rounded-2">
+      <div className="m-4 d-flex justify-content-between bg-light p-3 rounded-2 header-heading">
         <h2>All Restaurants</h2>
         <div className="d-flex gap-3">
+          <CsvExport
+            api={`${serverAddress}/admin/get-all/restaurants?isExport=true`}
+          />
           <Button
             onClick={() => navigate("/admin/restaurant/add")}
-            variant="outline-info"
-            className="btn-sm"
+            className="btn-sm btn-warning"
           >
             Add Restaurant
           </Button>
           <Button
             onClick={() => setIsScraperOpen(true)}
-            variant="outline-success"
-            className="btn-sm"
+            className="btn-sm btn-success"
           >
             Scrape Restaurant
           </Button>

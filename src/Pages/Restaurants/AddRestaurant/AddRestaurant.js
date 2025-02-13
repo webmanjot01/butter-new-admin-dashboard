@@ -139,7 +139,7 @@ const AddRestaurant = () => {
     <>
       {isLoading && <CustomLoader />}
 
-      <div className="m-4 bg-light p-3 rounded-2">
+      <div className="m-4 bg-light p-3 rounded-2 header-heading">
         <h2>Add Restaurant</h2>
       </div>
       <div className="m-4 bg-light pt-4 px-3 pb-0 rounded-2">

@@ -3,11 +3,12 @@ import { FaMedal } from "react-icons/fa";
 import { Link, useLocation } from "react-router-dom";
 import { MdDashboard } from "react-icons/md";
 import { MdOutlineReportGmailerrorred } from "react-icons/md";
-
+import { GrDocumentConfig } from "react-icons/gr";
 import { IoRestaurant } from "react-icons/io5";
 import { IoMdSettings } from "react-icons/io";
 import { MdPrivacyTip } from "react-icons/md";
 import { MdOutlineNoteAlt } from "react-icons/md";
+import { MdManageAccounts } from "react-icons/md";
 import { PiUsersThreeFill } from "react-icons/pi";
 function SideBarItems({ isLarge }) {
   const loaction = useLocation();
@@ -52,9 +53,19 @@ function SideBarItems({ isLarge }) {
       categories: "Settings",
       submenus: [
         {
-          icon: <IoMdSettings size={25} />,
+          icon: <GrDocumentConfig size={25} />,
           title: "Email Settings",
           url: "/admin/settings/emails",
+        },
+        {
+          icon: <GrDocumentConfig size={25} />,
+          title: "Location Settings",
+          url: "/admin/settings/location",
+        },
+        {
+          icon: <MdManageAccounts size={25} />,
+          title: "Manage Admin",
+          url: "/admin/admin-lists",
         },
         {
           icon: <MdPrivacyTip size={25} />,

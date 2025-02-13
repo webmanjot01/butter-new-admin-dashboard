@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import "./viewmodal.css";
 import { serverAddress } from "../../../envdata";
-const ViewModal = ({ isOpen, setIsOpen, clearData, data }) => {
+import { toast } from "react-toastify";
+const ViewModal = ({ isOpen, refereshData, setIsOpen, clearData, data }) => {
   // http://3.18.193.164:5000/removeReportedPost
-  const handleRemovePost = async (id) => {
-    alert("ll");
+  const handleRemovePost = async (id, reportId) => {
+    if (!id) {
+      return toast.info("The Post is already deleted");
+    }
     try {
       const response = await fetch(serverAddress + "/removeReportedPost", {
         method: "POST",
@@ -13,12 +16,17 @@ const ViewModal = ({ isOpen, setIsOpen, clearData, data }) => {
         },
         body: JSON.stringify({
           postId: id,
+          reportId: reportId,
         }),
       });
+
       setIsOpen(false);
+      toast.success("Post deleted successfully");
       clearData({});
+      refereshData();
     } catch (err) {
       console.log(err);
+      toast.error("Something went wrong");
     }
   };
   const handledeclineRequest = async (id) => {
@@ -29,13 +37,16 @@ const ViewModal = ({ isOpen, setIsOpen, clearData, data }) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          postId: id,
+          _id: id,
         }),
       });
       setIsOpen(false);
+      toast.success("Request declined successfully");
       clearData({});
+      refereshData();
     } catch (err) {
       console.log(err);
+      toast.error("Something went wrong");
     }
   };
   return (
@@ -59,9 +70,15 @@ const ViewModal = ({ isOpen, setIsOpen, clearData, data }) => {
             <div className="modal-body">
               <div className="modal-row">
                 <span className="label">Reported Post: </span>
-                <span className="value">
+                <span className="values">
                   {/* <img src="#" alt="Reported Post" /> */}
-                  {data?.reported_post?._id}
+                  {/* {data?.reported_post?._id} */}
+                  <img
+                    height={100}
+                    width={100}
+                    src={data?.reported_post?.upload?.[0].mediapath}
+                    alt="Poster Avatar"
+                  />
                 </span>
               </div>
               <div className="modal-row">
@@ -72,33 +89,35 @@ const ViewModal = ({ isOpen, setIsOpen, clearData, data }) => {
                 <span className="label">Report By:</span>
                 <span className="value">
                   <img
-                    src={data.reported_by.profile_image}
+                    src={data?.reported_by?.profile_image}
                     alt="Poster Avatar"
                   />{" "}
-                  {data.reported_by.username}
+                  {data?.reported_by?.username}
                 </span>
               </div>
               <div className="modal-row">
                 <span className="label">Post By:</span>
                 <span className="value">
                   <img
-                    src={data.reported_user.profile_image}
+                    src={data?.reported_user?.profile_image}
                     alt="Poster Avatar"
                   />{" "}
-                  {data.reported_user.username}
+                  {data?.reported_user?.username}
                 </span>
               </div>
             </div>
             <div className="modal-footer">
               <button
-                onClick={() => handleRemovePost(data?.reported_post?._id)}
+                onClick={() =>
+                  handleRemovePost(data?.reported_post?._id, data._id)
+                }
                 className="accept-btn"
               >
                 Accept
               </button>
               <button
                 className="decline-btn"
-                onClick={() => handledeclineRequest(data?.reported_post?._id)}
+                onClick={() => handledeclineRequest(data._id)}
               >
                 Decline
               </button>

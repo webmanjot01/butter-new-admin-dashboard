@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./login.css";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 import { serverAddress } from "../../envdata";
 function Login({ setIsLogin }) {
   const [email, setemail] = useState("");
@@ -14,19 +15,15 @@ function Login({ setIsLogin }) {
       .post(serverAddress + "/admin/login", { email, password })
       .then((response) => {
         if (response.data.status === true) {
+          localStorage.setItem("adminToken", response.data.token);
+          toast.success(response.data.message);
+
           navigate("/admin");
-          localStorage.setItem(
-            "adminToken",
-            "dgwedfefgpeusifh;ewfuwerhfopuisdgjdrbfghgpisd"
-          );
-          localStorage.setItem(
-            "adminData",
-            JSON.stringify(response.data.userdata)
-          );
         }
       })
       .catch((error) => {
-        console.error(error);
+        toast.error(error.response.data.message);
+        console.log(error.response.data.message);
       });
   };
 

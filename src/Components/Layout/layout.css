@@ -3,7 +3,9 @@
 }
 
 .sidebar-main {
-  background: rgb(221, 227, 245);
+  /* background: rgb(221, 227, 245); */
+  background-color: rgb(45, 56, 76);
+  color: white;
   min-height: 100vh;
   transition: width 0.2s;
 }
@@ -17,7 +19,9 @@
   align-items: center;
   padding: 0 50px 0 30px;
   justify-content: space-between;
-  background: rgb(221, 227, 245);
+  color: white;
+  background-color: rgb(45, 56, 76);
+  /* background: rgb(221, 227, 245); */
   min-height: 60px;
 }
 
@@ -27,6 +31,8 @@
   align-items: center;
   white-space: nowrap;
   font-size: 25px;
+  border-bottom: 1px solid white;
+  border-right: 1px solid white;
   font-weight: 600;
   min-height: 60px;
   color: white;
@@ -49,13 +55,15 @@
 }
 
 .sidebar-submenus-active {
-  background-color: rgb(153, 213, 244);
+  background-color: rgb(120 124 126);
+  /* background-color: rgb(153, 213, 244); */
   /* background-color: rgb(243, 189, 243); */
-  border-right: 6px solid rgb(40, 143, 36);
+  border-right: 6px solid rgb(233, 238, 232);
 }
 
 .sidebar-submenus:hover {
-  background-color: rgb(153, 213, 244);
+  background-color: rgb(120 124 126);
+  /* background-color: rgb(153, 213, 244); */
 }
 
 .sidebar-small {
@@ -68,7 +76,8 @@
 
 .linknone {
   text-decoration: none;
-  color: rgb(47, 11, 77);
+  color: white;
+  /* color: rgb(47, 11, 77); */
 }
 
 .er {
@@ -103,4 +112,8 @@
 
 .cursor {
   cursor: pointer;
+}
+
+.header-heading {
+  background: linear-gradient(rgb(251, 140, 230), rgb(254, 140, 165));
 }

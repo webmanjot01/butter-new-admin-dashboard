@@ -10,6 +10,8 @@ import TermsConditionsPage from "./Pages/Terms&Condition/TermsCondition";
 import EmailSetting from "./Pages/EmailSetting/EmailSetting";
 import ReportedPost from "./Pages/Posts/ReportedPost";
 import AddRestaurant from "./Pages/Restaurants/AddRestaurant/AddRestaurant";
+import AdminLists from "./Pages/ManageAdmin/AdminLists";
+import LocationSettings from "./Pages/LocationSettings/LocationSettings";
 
 function AdminRoutes() {
   return (
@@ -24,6 +26,8 @@ function AdminRoutes() {
         <Route path="/privacy&policy" element={<PrivacyPolicy />} />
         <Route path="/terms&condition" element={<TermsConditionsPage />} />
         <Route path="/reported-posts" element={<ReportedPost />} />
+        <Route path="/admin-lists" element={<AdminLists />} />
+        <Route path="/settings/location" element={<LocationSettings />} />
       </Routes>
     </Layout>
   );

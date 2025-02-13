@@ -13,6 +13,7 @@ const ScrapRestaurantModal = ({
   setIsLoading,
 }) => {
   const [restaurantCount, setRestaurantCount] = useState("");
+  const [restaurantName, setRestaurantName] = useState("");
   const [location, setLocation] = useState({});
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -20,11 +21,17 @@ const ScrapRestaurantModal = ({
     console.log("Restaurant Count:", restaurantCount);
     console.log("Location:", location);
 
-    if (!restaurantCount || Object.keys(location).length == 0) {
+    if (!restaurantCount) {
       return alert("All feilds are required!");
     }
+    if (!restaurantName && Object.keys(location).length == 0) {
+      // If neither Location nor RestaurantName has a value, assign default values
+      return alert("All feilds are required!");
+    }
+
     const data = {
       restaurantCount, // Assuming these are defined
+      restaurantName,
       location,
     };
     setIsLoading(true);
@@ -47,6 +54,7 @@ const ScrapRestaurantModal = ({
         toast.success(`${result.count} new restaurants adedd`);
         fetchRestaurantsData("all");
         setRestaurantCount(null);
+        setRestaurantName(null);
         setLocation({});
       }
       setIsLoading(false);
@@ -83,12 +91,40 @@ const ScrapRestaurantModal = ({
                   required
                 />
               </div>
-
               <div className="mb-3">
                 <label htmlFor="location" className="form-label">
                   Location
                 </label>
                 <Autocomplete setLocation={setLocation} />
+              </div>
+              <div className="d-flex justify-content-center align-items-center">
+                <hr
+                  style={{
+                    flexGrow: 1,
+                    borderTop: "1px solid black",
+                    margin: "0 10px",
+                  }}
+                />
+                <span>or</span>
+                <hr
+                  style={{
+                    flexGrow: 1,
+                    borderTop: "1px solid black",
+                    margin: "0 10px",
+                  }}
+                />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="restaurantName" className="form-label">
+                  Restaurant Name
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="restaurantName"
+                  value={restaurantName}
+                  onChange={(e) => setRestaurantName(e.target.value)}
+                />
               </div>
               <div className="mt-5  d-flex justify-content-between">
                 <button type="submit" className="btn btn-primary mt-4">

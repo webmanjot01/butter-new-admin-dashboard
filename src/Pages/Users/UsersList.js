@@ -3,6 +3,7 @@ import { Table, Pagination, Button } from "react-bootstrap";
 import { serverAddress } from "../../envdata";
 import { FaPen } from "react-icons/fa";
 import UserActionModal from "./UserActionModal";
+import CSVExport from "../../Components/CSVExport/CSVExport";
 const UsersList = () => {
   const [isTableLoading, setIsTableLoading] = useState(false);
   const [limit, setLimit] = useState(10); // Number of items per page
@@ -50,9 +51,10 @@ const UsersList = () => {
 
   return (
     <>
-      <div className="m-4 bg-light p-3 rounded-2">
+      <div className="m-4 d-flex justify-content-between bg-light p-3 rounded-2 header-heading">
         {" "}
         <h2>All Users </h2>
+        <CSVExport api={`${serverAddress}/admin/get-all/user?isExport=true`} />
       </div>
       <div className=" m-4 bg-light pt-4 px-3 pb-0 rounded-2 ">
         <div className="d-flex justify-content-between bg-light py-3 rounded-2">

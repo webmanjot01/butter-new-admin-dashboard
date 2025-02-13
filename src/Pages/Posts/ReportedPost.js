@@ -4,6 +4,7 @@ import { serverAddress } from "../../envdata";
 import axios from "axios";
 import { FaEye, FaPen } from "react-icons/fa";
 import ViewModal from "../../Components/Posts/ReportedPost/ViewModal";
+import CsvExport from "../../Components/CSVExport/CSVExport";
 
 function ReportedPost() {
   const [isTableLoading, setIsTableLoading] = useState(false);
@@ -18,14 +19,14 @@ function ReportedPost() {
 
   function fetchRestaurants() {
     try {
-      const url = serverAddress + `/getallReportpost`;
+      const url = `${serverAddress}/getallReportpost?page=${page}&limit=${limit}`;
       setIsTableLoading(true);
       axios
         .get(url)
         .then((response) => {
           setRestaurants(response.data.data);
-          // setTotalItems(response.data.total_items);
-          // setTotalPages(response.data.total_pages);
+          setTotalItems(response.data.pagination.totalReports);
+          setTotalPages(response.data.pagination.totalPages);
           setIsTableLoading(false);
         })
         .catch((error) => {
@@ -41,11 +42,18 @@ function ReportedPost() {
   useEffect(() => {
     fetchRestaurants();
   }, [page, search, isActive]); // Refetch when the page changes
+  const handlePageChange = (newPage) => {
+    if (newPage > 0 && newPage <= totalPages) {
+      setPage(newPage);
+    }
+  };
   return (
     <div>
-      <div className="m-4 d-flex justify-content-between bg-light p-3 rounded-2">
+      <div className="m-4 d-flex justify-content-between bg-light p-3 rounded-2 header-heading">
         <h2>Reported Posts</h2>
-        <div className="d-flex gap-3"></div>
+        <div className="d-flex gap-3">
+          <CsvExport api={`${serverAddress}/getallReportpost?isExport=true`} />
+        </div>
       </div>
       <div className="m-4 bg-light pt-4 px-3 pb-0 rounded-2">
         <Table hover responsive>
@@ -55,6 +63,7 @@ function ReportedPost() {
               <th> ReportedBy</th>
               <th>Post Id</th>
               <th> Reported User</th>
+              <th> Status</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -66,6 +75,7 @@ function ReportedPost() {
                   <td>{item?.reported_by?.username}</td>
                   <td>{item?.reported_post?._id}</td>
                   <td>{item?.reported_user?.username}</td>
+                  <td>{item?.status}</td>
                   <td>
                     <FaEye
                       onClick={() => {
@@ -111,7 +121,7 @@ function ReportedPost() {
         <div className="d-flex justify-content-center pb-3">
           <Button
             variant="outline-secondary"
-            // onClick={() => handlePageChange(page - 1)}
+            onClick={() => handlePageChange(page - 1)}
             disabled={page === 1}
           >
             Previous
@@ -121,7 +131,7 @@ function ReportedPost() {
           </span>
           <Button
             variant="outline-secondary"
-            // onClick={() => handlePageChange(page + 1)}
+            onClick={() => handlePageChange(page + 1)}
             disabled={page === totalPages}
           >
             Next
@@ -132,6 +142,7 @@ function ReportedPost() {
         isOpen={isView}
         setIsOpen={setIsView}
         clearData={setSelectedData}
+        refereshData={fetchRestaurants}
         data={singleData}
       />
     </div>

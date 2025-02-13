@@ -49,7 +49,7 @@ const TermsConditionsPage = () => {
 
   return (
     <div>
-      <div className="m-4 d-flex justify-content-between bg-light p-3 rounded-2">
+      <div className="m-4 d-flex justify-content-between bg-light p-3 rounded-2 header-heading">
         <h2>Terms and Conditions</h2>
         <div className="d-flex gap-3">
           <Button variant="primary" onClick={handleEditClick}>

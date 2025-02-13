@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Button } from "react-bootstrap";
 import { serverAddress } from "../../envdata";
+import EmailEditModal from "./EmailEditModal";
 
 const EmailSetting = () => {
   const [email, setEmail] = useState("");
@@ -11,33 +12,35 @@ const EmailSetting = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const fetchSmtpCredentials = async () => {
-      try {
-        const response = await axios.get(serverAddress + "/getsmtp");
-        if (response.data.status && response.data.data.length > 0) {
-          const smtpData = response.data.data[0];
-          setEmail(smtpData.smtpemail);
-          setPassword(smtpData.smtppassword);
-          setPort(smtpData.smtpport);
-          setHost(smtpData.smtphost);
-        }
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
+  const fetchSmtpCredentials = async () => {
+    try {
+      const response = await axios.get(serverAddress + "/getsmtp");
+      if (response.data.status && response.data.data.length > 0) {
+        const smtpData = response.data.data[0];
+        setEmail(smtpData.smtpemail);
+        setPassword(smtpData.smtppassword);
+        setPort(smtpData.smtpport);
+        setHost(smtpData.smtphost);
       }
-    };
-
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
     fetchSmtpCredentials();
   }, []);
 
   return (
     <div>
-      <div className="m-4 d-flex justify-content-between bg-light p-3 rounded-2">
+      <div className="m-4 d-flex justify-content-between bg-light p-3 rounded-2 header-heading">
         <h2>SMTP Email Configuration</h2>
         <div className="d-flex gap-3">
-          <Button variant="primary">Edit</Button>
+          <EmailEditModal
+            fetchAdmins={fetchSmtpCredentials}
+            editData={{ email, port, password, host }}
+          />
         </div>
       </div>
       <div className="m-4 bg-light py-4 px-3  rounded-2">
