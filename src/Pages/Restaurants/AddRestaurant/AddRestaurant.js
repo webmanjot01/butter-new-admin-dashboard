@@ -84,10 +84,11 @@ const AddRestaurant = () => {
       alert("Full Address is required");
       return false;
     }
-    if (!postal_code || !/^\d{5,6}$/.test(postal_code)) {
-      alert("Postal code should be 5 or 6 digits");
+    if (!postal_code) {
+      alert("Postal code is required");
       return false;
     }
+
     return true;
   };
 

@@ -14,6 +14,7 @@ const ScrapRestaurantModal = ({
 }) => {
   const [restaurantCount, setRestaurantCount] = useState("");
   const [restaurantName, setRestaurantName] = useState("");
+  const [selectedStar, setSelectedStar] = useState("4");
   const [location, setLocation] = useState({});
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -33,6 +34,7 @@ const ScrapRestaurantModal = ({
       restaurantCount, // Assuming these are defined
       restaurantName,
       location,
+      selectedStar,
     };
     setIsLoading(true);
     try {
@@ -90,6 +92,23 @@ const ScrapRestaurantModal = ({
                   onChange={(e) => setRestaurantCount(e.target.value)}
                   required
                 />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="restaurantCount" className="form-label">
+                  Select Minimum Star
+                </label>
+                <select
+                  className="form-select"
+                  value={selectedStar}
+                  onChange={(e) => setSelectedStar(e.target.value)}
+                >
+                  {/* <option value="">Please select an option</option> */}
+                  <option value="1">1 Star and above</option>
+                  <option value="2">2 Star and above</option>
+                  <option value="3">3 Star and above</option>
+                  <option value="4">4 Star and above</option>
+                  <option value="5">5 Star</option>
+                </select>
               </div>
               <div className="mb-3">
                 <label htmlFor="location" className="form-label">
