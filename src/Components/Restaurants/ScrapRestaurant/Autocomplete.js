@@ -2,12 +2,17 @@ import React, { useEffect, useRef, useState } from "react";
 
 const apiKey = "AIzaSyCMh77P3xQzQwC9VmOffzFmmvJ6IVFuwKI";
 
-const Autocomplete = ({ setLocation }) => {
+const Autocomplete = ({ setLocation, value }) => {
   const [address, setAddress] = useState("");
   const [predictions, setPredictions] = useState([]);
   const [locationDetails, setLocationDetails] = useState(null);
   const inputRef = useRef(null);
 
+  useEffect(() => {
+    if (value) {
+      setAddress(value);
+    }
+  }, [value]);
   useEffect(() => {
     const loadGoogleMaps = () => {
       if (window.google) {
@@ -69,7 +74,7 @@ const Autocomplete = ({ setLocation }) => {
     };
   }, []);
 
-  const fetchPlaceDetails = (placeId) => {
+  const fetchPlaceDetails = (placeId, full_address) => {
     const placesService = new window.google.maps.places.PlacesService(
       document.createElement("div")
     );
@@ -101,14 +106,17 @@ const Autocomplete = ({ setLocation }) => {
           longitude,
           postal_code: postalCode,
         });
-        setLocation({
-          city,
-          state,
-          country,
-          latitude,
-          longitude,
-          postal_code: postalCode,
-        });
+        setLocation(
+          {
+            city,
+            state,
+            country,
+            latitude,
+            longitude,
+            postal_code: postalCode,
+          },
+          full_address
+        );
       }
     });
   };
@@ -116,7 +124,7 @@ const Autocomplete = ({ setLocation }) => {
   const handleSelect = (prediction) => {
     setAddress(prediction.description);
     setPredictions([]);
-    fetchPlaceDetails(prediction.place_id);
+    fetchPlaceDetails(prediction.place_id, prediction.description);
   };
 
   return (
@@ -144,7 +152,9 @@ const Autocomplete = ({ setLocation }) => {
           </ul>
         )}
       </div>
+
       {/* {locationDetails && (
+
         <div className="location-details mt-3">
           <p>
             <strong>City:</strong> {locationDetails.city}

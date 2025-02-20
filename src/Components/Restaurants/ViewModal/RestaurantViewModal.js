@@ -3,6 +3,7 @@ import { serverAddress } from "../../../envdata";
 import { toast } from "react-toastify";
 import TagInput from "../../TagInput/TagInput";
 import { IoMdClose } from "react-icons/io";
+import Autocomplete from "../ScrapRestaurant/Autocomplete";
 const RestaurantViewModal = ({
   fetchRestaurantsData,
   show = true,
@@ -16,7 +17,8 @@ const RestaurantViewModal = ({
     phone: selectedRestaurant?.phone || "",
     address: selectedRestaurant?.address || "",
     email: selectedRestaurant?.email || "",
-    // hashtags:selectedRestaurant?.hashtags || [],
+    description: selectedRestaurant?.description || "",
+    hashtags: selectedRestaurant?.hashtags || [],
   });
 
   const [cuisine, setCuisine] = useState({ hashtags: [] });
@@ -73,6 +75,8 @@ const RestaurantViewModal = ({
       phone: selectedRestaurant?.phone || "",
       address: selectedRestaurant?.address || "",
       email: selectedRestaurant?.email || "",
+      description: selectedRestaurant?.description || "",
+      hashtags: selectedRestaurant?.hashtags || "",
       // });
     });
   }, [selectedRestaurant]);
@@ -189,16 +193,33 @@ const RestaurantViewModal = ({
               <div className="col-12 mb-4">
                 <div className="form-group">
                   <label className="h5" htmlFor="hashtags">
-                    #Hashtags
+                    #Cuisine
                   </label>
                   <TagInput
                     setEditedRestaurant={setEditedRestaurant}
                     value={editedRestaurant.hashtags}
                   />
+                  {/* {JSON.stringify(editedRestaurant.hashtags)} */}
                 </div>
               </div>
 
               <div className="col-12 mb-4">
+                <div className="form-group">
+                  <label className="h5" htmlFor="description">
+                    Description
+                  </label>
+                  <input
+                    type="text"
+                    id="description"
+                    name="description"
+                    className="form-control"
+                    placeholder="Description"
+                    onChange={handleInputChange}
+                    value={editedRestaurant.description || ""}
+                  />
+                </div>
+              </div>
+              {/* <div className="col-12 mb-4">
                 <div className="form-group">
                   <label className="h5" htmlFor="hashtags">
                     #Cuisine
@@ -208,7 +229,7 @@ const RestaurantViewModal = ({
                     value={selectedRestaurant.preferredCuisine}
                   />
                 </div>
-              </div>
+              </div> */}
 
               {/* Email */}
               <div className="col-12 mb-4">
@@ -235,7 +256,7 @@ const RestaurantViewModal = ({
                     Phone
                   </label>
                   <input
-                    type="tel"
+                    type="number"
                     id="phone"
                     name="phone"
                     className="form-control"
@@ -252,7 +273,20 @@ const RestaurantViewModal = ({
                   <label htmlFor="address" className="h5">
                     Address
                   </label>
-                  <input
+
+                  <Autocomplete
+                    value={editedRestaurant.address || ""}
+                    setLocation={(data, address) => {
+                      console.log(data, address, "datadata");
+
+                      setEditedRestaurant({
+                        ...editedRestaurant,
+                        ...data,
+                        full_address: address,
+                      });
+                    }}
+                  />
+                  {/* <input
                     type="text"
                     id="address"
                     className="form-control"
@@ -264,7 +298,7 @@ const RestaurantViewModal = ({
                         address: e.target.value,
                       })
                     }
-                  />
+                  /> */}
                 </div>
               </div>
 
