@@ -72,20 +72,13 @@ const AddRestaurant = () => {
       alert("Valid Email is required");
       return false;
     }
-    if (!phone || !/^\d{10}$/.test(phone)) {
-      alert("Phone number should be 10 digits");
-      return false;
-    }
+
     if (!profile_image) {
       alert("Profile Image is required");
       return false;
     }
     if (!full_address) {
       alert("Full Address is required");
-      return false;
-    }
-    if (!postal_code) {
-      alert("Postal code is required");
       return false;
     }
 
@@ -101,6 +94,15 @@ const AddRestaurant = () => {
     }
 
     try {
+      if (!formData.postal_code) {
+        alert("Postal code is required");
+        return false;
+      }
+      if (!formData.phone || !/^\d{10}$/.test(formData.phone)) {
+        alert("Phone number should be 10 digits");
+        return false;
+      }
+
       const formDataToSend = new FormData();
 
       // Append all form data to FormData object
@@ -143,6 +145,7 @@ const AddRestaurant = () => {
       <div className="m-4 bg-light p-3 rounded-2 header-heading">
         <h2>Add Restaurant</h2>
       </div>
+
       <div className="m-4 bg-light pt-4 px-3 pb-0 rounded-2">
         <Row>
           <Col md={6}>
@@ -209,8 +212,14 @@ const AddRestaurant = () => {
             <Form.Group controlId="address">
               <Form.Label>Address</Form.Label>
               <Autocomplete
-                setLocation={(data) => {
-                  setFormData({ ...formData, ...data });
+                value={formData.full_address}
+                setLocation={(data, full_address) => {
+                  setFormData({
+                    ...formData,
+                    ...data,
+                    postal_code: data.postal_code || formData.postal_code,
+                    full_address,
+                  });
                 }}
               />
             </Form.Group>
@@ -259,7 +268,7 @@ const AddRestaurant = () => {
           </Col>
 
           <Col md={6}>
-            <Form.Group controlId="full_address">
+            {/* <Form.Group controlId="full_address">
               <Form.Label>Full Address</Form.Label>
               <Form.Control
                 type="text"
@@ -267,7 +276,7 @@ const AddRestaurant = () => {
                 value={formData.full_address}
                 onChange={handleChange}
               />
-            </Form.Group>
+            </Form.Group> */}
 
             <Form.Group controlId="postal_code">
               <Form.Label>Postal Code</Form.Label>
